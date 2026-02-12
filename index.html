@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🌾 农场经验计算器</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- GitHub Corner -->
+    <a href="https://github.com/linguo2625469/FarmCalc" target="_blank" class="github-corner" aria-label="View on GitHub">
+        <svg width="60" height="60" viewBox="0 0 250 250" style="fill:#70b77e;color:#fff;position:fixed;top:0;right:0;border:0;z-index:9999;" aria-hidden="true">
+            <path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path>
+            <path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin:130px 106px;" class="octo-arm"></path>
+            <path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path>
+        </svg>
+    </a>
+
+    <!-- 顶部导航 -->
+    <nav class="clay-nav">
+        <div class="nav-brand">🌾 农场经验计算器</div>
+        <div class="nav-links">
+            <a href="#calculator" class="nav-link active">经验计算</a>
+            <a href="#ranking" class="nav-link">排行榜</a>
+            <a href="#catalog" class="nav-link">作物图鉴</a>
+        </div>
+    </nav>
+
+    <!-- 英雄区域 -->
+    <section class="hero-section">
+        <div class="hero-content">
+            <h1 class="hero-title">找到你的最优作物 🌱</h1>
+            <p class="hero-subtitle">输入等级和土地数量，智能计算经验最大化的种植方案</p>
+            <div class="hero-badges">
+                <span class="clay-badge badge-green">🌿 100种作物</span>
+                <span class="clay-badge badge-orange">⚡ 实时计算</span>
+                <span class="clay-badge badge-purple">📊 施肥对比</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- 计算器区域 -->
+    <section id="calculator" class="section">
+        <h2 class="section-title">🧮 经验计算器</h2>
+        <div class="calculator-grid">
+            <!-- 输入面板 -->
+            <div class="clay-card card-input">
+                <h3 class="card-title">📝 输入参数</h3>
+                <div class="input-group">
+                    <label class="input-label">🎯 账号等级</label>
+                    <div class="input-wrapper">
+                        <input type="number" id="inputLevel" min="1" max="100" value="27" class="clay-input">
+                        <span class="input-hint">Lv 1 ~ 100</span>
+                    </div>
+                </div>
+                <div class="input-group">
+                    <label class="input-label">🏡 土地数量</label>
+                    <div class="input-wrapper">
+                        <input type="number" id="inputLands" min="1" max="200" value="18" class="clay-input">
+                        <span class="input-hint">默认 18 块</span>
+                    </div>
+                </div>
+                <div class="input-group">
+                    <label class="input-label">🧪 使用技能</label>
+                    <div class="skill-toggles">
+                        <label class="clay-toggle">
+                            <input type="checkbox" id="skillFertilizer" checked>
+                            <span class="toggle-slider"></span>
+                            <span class="toggle-label">普通肥料</span>
+                        </label>
+                    </div>
+                </div>
+                <button id="btnCalculate" class="clay-btn btn-primary" onclick="calculate()">
+                    🚀 开始计算
+                </button>
+            </div>
+
+            <!-- 引导占位 -->
+            <div class="clay-card card-placeholder" id="cardPlaceholder">
+                <div class="placeholder-icon">🌱</div>
+                <h3 class="placeholder-title">等待计算</h3>
+                <p class="placeholder-desc">输入你的等级和土地数量<br>点击「开始计算」查看最优种植方案</p>
+                <div class="placeholder-tips">
+                    <div class="tip-item">🎯 支持 Lv1~100 全等级</div>
+                    <div class="tip-item">🧪 可对比施肥 / 不施肥效率</div>
+                    <div class="tip-item">📊 自动推荐经验最大化作物</div>
+                </div>
+            </div>
+
+            <!-- 最优推荐卡片 - 不施肥 -->
+            <div class="clay-card card-result card-no-fert" id="cardNoFert" style="display:none;">
+                <div class="result-icon">🌾</div>
+                <h3 class="card-title">不施肥推荐</h3>
+                <div class="result-name" id="noFertName">-</div>
+                <div class="result-stats">
+                    <div class="stat-item">
+                        <span class="stat-label">每小时经验</span>
+                        <span class="stat-value" id="noFertExpH">-</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">每日经验</span>
+                        <span class="stat-value" id="noFertExpD">-</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">生长时间</span>
+                        <span class="stat-value" id="noFertGrow">-</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">需要等级</span>
+                        <span class="stat-value" id="noFertLv">-</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 最优推荐卡片 - 施肥 -->
+            <div class="clay-card card-result card-fert" id="cardFert" style="display:none;">
+                <div class="result-icon">🧪</div>
+                <h3 class="card-title">施肥推荐</h3>
+                <div class="result-name" id="fertName">-</div>
+                <div class="result-stats">
+                    <div class="stat-item">
+                        <span class="stat-label">每小时经验</span>
+                        <span class="stat-value" id="fertExpH">-</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">每日经验</span>
+                        <span class="stat-value" id="fertExpD">-</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">肥后生长</span>
+                        <span class="stat-value" id="fertGrow">-</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">提升比例</span>
+                        <span class="stat-value highlight" id="fertGain">-</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 进度追踪演示 -->
+        <div class="clay-card card-progress" id="cardProgress" style="display:none;">
+            <h3 class="card-title">📊 经验效率对比</h3>
+            <div class="progress-container" id="progressBars">
+                <!-- 动态生成 -->
+            </div>
+        </div>
+    </section>
+
+    <!-- 排行榜区域 -->
+    <section id="ranking" class="section">
+        <h2 class="section-title">🏆 经验排行榜</h2>
+        <div class="ranking-tabs">
+            <button class="clay-tab active" onclick="switchRankTab('noFert', this)">🌾 不施肥</button>
+            <button class="clay-tab" onclick="switchRankTab('fert', this)">🧪 施肥</button>
+        </div>
+        <div class="clay-card card-ranking">
+            <div class="ranking-header">
+                <span class="rh-rank">排名</span>
+                <span class="rh-name">作物</span>
+                <span class="rh-level">等级</span>
+                <span class="rh-grow">生长时间</span>
+                <span class="rh-exp">每小时经验</span>
+                <span class="rh-bar">效率</span>
+            </div>
+            <div id="rankingBody" class="ranking-body">
+                <!-- 动态生成 -->
+            </div>
+        </div>
+    </section>
+
+    <!-- 作物图鉴 -->
+    <section id="catalog" class="section">
+        <h2 class="section-title">📖 作物图鉴</h2>
+        <div class="catalog-filter">
+            <input type="text" id="catalogSearch" class="clay-input" placeholder="🔍 搜索作物名称..." oninput="filterCatalog()">
+            <select id="catalogSeason" class="clay-select" onchange="filterCatalog()">
+                <option value="all">全部季节</option>
+                <option value="1">一季作物</option>
+                <option value="2">二季作物</option>
+            </select>
+        </div>
+        <div class="catalog-grid" id="catalogGrid">
+            <!-- 动态生成 -->
+        </div>
+    </section>
+
+    <!-- 页脚 -->
+    <footer class="clay-footer">
+        <p>🌾 FarmCalc · 农场经验计算器 · 数据来源于游戏配置 · 仅供参考</p>
+        <p style="margin-top:8px;font-size:0.85rem;opacity:0.7;">开源项目 · <a href="https://github.com/linguo2625469/FarmCalc" target="_blank" style="color:inherit;text-decoration:underline;">GitHub</a> · MIT License</p>
+    </footer>
+
+    <script src="app.js"></script>
+    <script>
+    // 导航切换：选中状态 + 平滑滚动
+    document.querySelectorAll('.nav-link').forEach(link => {
+        link.addEventListener('click', function(e) {
+            e.preventDefault();
+            document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+            this.classList.add('active');
+            const target = document.querySelector(this.getAttribute('href'));
+            if (target) {
+                target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        });
+    });
+
+    // 进入页面后停留1秒，然后缓慢滚动到经验计算器
+    setTimeout(() => {
+        const calculator = document.getElementById('calculator');
+        if (calculator) {
+            calculator.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+    }, 1000);
+
+    // 滚动时自动更新导航选中状态
+    const sections = document.querySelectorAll('.section');
+    const navLinks = document.querySelectorAll('.nav-link');
+    window.addEventListener('scroll', () => {
+        let current = '';
+        const offset = 120;
+        sections.forEach(sec => {
+            const top = sec.offsetTop - offset;
+            if (window.scrollY >= top) {
+                current = sec.getAttribute('id');
+            }
+        });
+        navLinks.forEach(link => {
+            link.classList.remove('active');
+            if (link.getAttribute('href') === '#' + current) {
+                link.classList.add('active');
+            }
+        });
+    });
+    </script>
+</body>
+</html>
