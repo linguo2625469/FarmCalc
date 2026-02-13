@@ -68,7 +68,25 @@
                             <span class="toggle-slider"></span>
                             <span class="toggle-label">普通肥料</span>
                         </label>
+                        <label class="clay-toggle" style="display:none;">
+                        <!-- <label class="clay-toggle"> -->
+                            <input type="checkbox" id="skillOrganicFertilizer">
+                            <span class="toggle-slider"></span>
+                            <span class="toggle-label">有机肥（默认叠加普通肥）</span>
+                        </label>
                     </div>
+                    <span class="input-hint">普通肥料可正常计算；有机肥料入口暂时关闭。</span>
+                </div>
+                <div class="input-group" id="organicSettings" style="display:none;">
+                    <label class="input-label">⏳ 有机肥可扣时长</label>
+                    <div class="input-wrapper">
+                        <input type="number" id="inputOrganicMinutes" min="0" step="1" value="0" class="clay-input">
+                        <span class="input-hint">单位：分钟。会在普通肥后的剩余生长时间上继续扣除</span>
+                    </div>
+                </div>
+                <div class="strategy-tip">
+                    <strong>小提示：</strong>在双肥料条件下，同一品级第 4 个作物经验效率最高。<br>
+                    若当前品级尚未解锁到第 4 个，可先种上一品级的第 4 个。
                 </div>
                 <button id="btnCalculate" class="clay-btn btn-primary" onclick="calculate()">
                     🚀 开始计算
@@ -83,6 +101,7 @@
                 <div class="placeholder-tips">
                     <div class="tip-item">🎯 支持 Lv1~100 全等级</div>
                     <div class="tip-item">🧪 可对比施肥 / 不施肥效率</div>
+                    <div class="tip-item">🌿 可输入有机肥扣时做同时长对比</div>
                     <div class="tip-item">📊 自动推荐经验最大化作物</div>
                     <div class="tip-item">⚠️ 多季作物的计算方式暂未确定，结果仅供参考</div>
                 </div>
@@ -137,6 +156,35 @@
                     </div>
                 </div>
             </div>
+
+            <!-- 最优推荐卡片 - 普通肥 + 有机肥 -->
+            <div class="clay-card card-result card-organic" id="cardOrganic" style="display:none;">
+                <div class="result-icon">🌿</div>
+                <h3 class="card-title">有机肥推荐</h3>
+                <div class="result-name" id="organicName">-</div>
+                <div class="result-stats">
+                    <div class="stat-item">
+                        <span class="stat-label">每小时经验</span>
+                        <span class="stat-value" id="organicExpH">-</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">每日经验</span>
+                        <span class="stat-value" id="organicExpD">-</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">肥后生长</span>
+                        <span class="stat-value" id="organicGrow">-</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">相对普通肥</span>
+                        <span class="stat-value highlight" id="organicGain">-</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">可持续操作</span>
+                        <span class="stat-value" id="organicSupport">-</span>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <!-- 进度追踪演示 -->
@@ -152,8 +200,9 @@
     <section id="ranking" class="section">
         <h2 class="section-title">🏆 经验排行榜</h2>
         <div class="ranking-tabs">
-            <button class="clay-tab active" onclick="switchRankTab('noFert', this)">🌾 不施肥</button>
-            <button class="clay-tab" onclick="switchRankTab('fert', this)">🧪 施肥</button>
+            <button id="tabNoFert" class="clay-tab active" onclick="switchRankTab('noFert', this)">🌾 不施肥</button>
+            <button id="tabFert" class="clay-tab" onclick="switchRankTab('fert', this)">🧪 施肥</button>
+            <button id="tabOrganic" class="clay-tab" onclick="switchRankTab('organic', this)" style="display:none;">🌿 有机肥</button>
         </div>
         <div class="clay-card card-ranking">
             <div class="ranking-header">
@@ -165,7 +214,10 @@
                 <span class="rh-bar">效率</span>
             </div>
             <div id="rankingBody" class="ranking-body">
-                <!-- 动态生成 -->
+                <div class="ranking-empty" id="rankingEmpty">
+                    <div style="font-size:2.5rem;margin-bottom:12px;">🏆</div>
+                    <p style="color:#a08d7d;font-size:0.95rem;">请先进行经验计算<br>排行榜将根据计算结果生成</p>
+                </div>
             </div>
         </div>
     </section>
